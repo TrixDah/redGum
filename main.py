@@ -5,7 +5,7 @@ class FlowerCounterApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Flower Counter")
-        self.root.geometry("400x300")  # Adjusted size for 1080p screen
+        root.tk.call('tk', 'scaling', 2.0)
 
         self.total_sum = 0
         self.history = []
