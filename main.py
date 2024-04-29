@@ -1,4 +1,5 @@
-import tkinter as tk
+
+       import tkinter as tk
 import csv
 
 class FlowerCounterApp:
@@ -55,13 +56,13 @@ class FlowerCounterApp:
         self.history_label.config(text=history_text)
 
     def generate_combinations(self):
-        combinations = []
+        combinations = set()
         self.generate_combinations_helper(self.total_sum, [], combinations)
-        self.save_combinations_to_csv()
+        self.save_combinations_to_csv(combinations)
 
     def generate_combinations_helper(self, target, current_history, combinations):
         if sum(current_history) == target:
-            combinations.append(current_history.copy())
+            combinations.add(tuple(current_history))
             return
 
         if sum(current_history) > target:
@@ -72,12 +73,14 @@ class FlowerCounterApp:
             self.generate_combinations_helper(target, current_history, combinations)
             current_history.pop()
 
-    def save_combinations_to_csv(self):
-        total = self.total_sum
-        history = ", ".join(map(str, self.history))
+    def save_combinations_to_csv(self, combinations):
         with open("combinations.csv", "w", newline="") as file:
             writer = csv.writer(file)
-            writer.writerow(["Total: {}".format(total), "History: {}".format(history)])
+            writer.writerow(["Total", "History"])
+            for combination in combinations:
+                total = sum(combination)
+                history = ", ".join(map(str, combination))
+                writer.writerow([total, history])
 
 def main():
     root = tk.Tk()
@@ -86,4 +89,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
